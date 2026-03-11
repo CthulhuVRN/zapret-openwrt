@@ -69,17 +69,17 @@ jobs:
         run: |
           echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
           echo "Tag name from github.ref_name: ${{ github.ref_name }}"
-          BRANCH=$(gh api repos/$REPO_LNK --jq $REPO_BRANCH)
+          BRANCH=$(gh api repos/$REPO_LNK --jq '.default_branch')
           REPO_DATE=$(gh api repos/$REPO_LNK/commits/$BRANCH --jq '.commit.committer.date')
           BUILD_DATE=$( date --utc +'%Y%m%d' )
           FW_DATE=$( date --utc +'%Y-%m-%d' )
           {
             echo "tag=$GITHUB_REF_NAME"
             echo "date=$(date --utc -d $REPO_DATE +%Y%m%d)"
-            echo "sha=$(gh api repos/$REPO_LNK/commits/$BRANCH --jq '.sha[0:7]')"
-            echo "url=$(gh api repos/$REPO_LNK/commits/$BRANCH --jq '.html_url')"
+            echo "sha=$(gh api repos/$REPO_LNK/commits/$REPO_BRANCH --jq '.sha[0:7]')"
+            echo "url=$(gh api repos/$REPO_LNK/commits/$REPO_BRANCH --jq '.html_url')"
             echo "message<<EOF"
-            gh api repos/$REPO_LNK/commits/$BRANCH --jq '.commit.message'
+            gh api repos/$REPO_LNK/commits/$REPO_BRANCH --jq '.commit.message'
             echo EOF
             echo "build_date=$BUILD_DATE"
             echo "fw_date=$FW_DATE"
