@@ -1,6 +1,11 @@
 #!/bin/sh /etc/rc.common
 # Copyright (c) 2024 remittor
 
+if [ -n "$IPKG_INSTROOT" ]; then
+	echo "Looks like not real OpenWrt environment. Exiting..."
+	exit 0
+fi
+
 USE_PROCD=1
 # after network
 START=21
